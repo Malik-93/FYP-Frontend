@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getMensProduct } from '../../../src/Redux/Actions/action';
+import { getMensProduct, addToCart } from '../../../src/Redux/Actions/action';
 import {Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import img from './images/men.jpg'
+import img from './images/mens/men.jpg';
+import img2 from './images/mens/men-2.jpg';
+import img3 from './images/mens/men-3.jpg';
+import img4 from './images/mens/men-4.jpg';
+import img5 from './images/mens/men-5.jpg';
+import { Button } from 'react-mdl';
 class MensCollection extends Component {
   constructor(props){
     super(props);
     this.state = {
-      local: {}
+      local: {},
+      cart: {
+        name: [],
+        inCart: false
+      },
     }
   }
  
@@ -18,16 +27,14 @@ class MensCollection extends Component {
       .then((product) => {
         console.log(product.data )
         this.props.getMens(product.data)
-        localStorage.setItem('Mens-Collection', product.data )
+        localStorage.setItem('Mens-Collection', JSON.stringify(product.data) )
       })
       .then( item  => {
         item =  localStorage.getItem('Mens-Collection' ) 
-        console.log('Data From LocalStorage', item)
       })
-      // .then(() => {
-      //   localStorage.removeItem('Mens-Collection')
-      //   console.log('Data removed Successfully')
-      // }) 
+      .then(() => {
+        localStorage.setItem('Cart', [] )
+      }) 
       .catch((error) => console.log(error))
   }
 
@@ -43,37 +50,26 @@ else {
  console.log('By pressing Button',  obj )
 }
   }
-//@Single image
 
-
-  // @All Images
-
-  // async fetchImage () {
-  //   try{
-  //     const res = await fetch(`http://localhost:8000/image/2168bc7a67772bc91fe421dca8580dc4.jpg`)
-  //     console.log('2nd image****/', res)
-  //     this.setState({
-  //       pictures: [res, ...this.state.pictures]
-  //     })
-  //   } catch (e) {
-  //    console.log('Error', e)
-  //   } 
-  //     }
-    
   render() {
-    console.log("My State", this.state.local)
+    console.log('Check', this.state.cart.name)
     return (
     <div>
-      <button onClick={this.handleLocalStorage}>Fetch from LocalStorage</button>
-   <h1>Mens Collection</h1>
-   {/* <h3 id='local'>Data from localStorage:{this.state.local}</h3>     */}
+   <h3>Mens Collection</h3>
    <div className="my-container">
           {
             this.props.products.map((product) => {
               return (
                 <div key={Math.random()}>
-                  <Card style={{ width: '18rem' }} className="my-card">
-              <Link to={'/details/'+ product._id}><Card.Img className="card-img" variant="top" src={img} /></Link>
+                  <Card style={{ width: '18rem' }}>
+              <Link to={'/details/'+ product._id}>
+              <Card.Img variant="top" 
+                   src={product.price === 500 ? img :
+                   product.price === 600 ? img2:
+                   product.price === 700 ? img3:
+                   product.price === 800 ? img4:
+                   product.price === 900 ? img5:
+                   ''} /></Link>
                     <Card.Body>
                       <Card.Title><b>Title:</b> {product.title}</Card.Title>
                       <Card.Text>
@@ -84,9 +80,11 @@ else {
                       <ListGroupItem><b>Company:</b> {product.company}</ListGroupItem>
                       <ListGroupItem><span><b>Price:</b></span> PKR {product.price}</ListGroupItem>
                     </ListGroup>
-                    <Card.Body>
-                  <Link to={'/details/'+ product._id }><button>Go to details</button> </Link>                
-                    <button>Add To Cart</button>                  
+                    <Card.Body>              
+                  <Button primary raised onClick = {() => {
+                    this.props.addToCart( product )
+                    alert('Item Added to your cart')
+                  } } > Add To Cart</Button>                  
                         </Card.Body>
                     <Card.Footer>
                      <p className="text-muted">Last Update: <span>{new Date().toLocaleTimeString()}</span></p>
@@ -104,12 +102,15 @@ else {
 }
 const mapStateToProps = (state) => {
   return {
-    products: state.reducer.mensProducts
+    products: state.reducer.mensProducts,
+    fullState : state.reducer,
+    cartProduct: state.cartReducer    
   }
 }
 const mapDispatchToProps = (dispatch) => {
   return {
     getMens: (product) => dispatch(getMensProduct(product)),
+    addToCart: (product) => dispatch(addToCart ( product ))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MensCollection)

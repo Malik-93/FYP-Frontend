@@ -1,5 +1,24 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import { connect } from 'react-redux';
+import men1 from './Collections/images/mens/men.jpg';
+import men2 from './Collections/images/mens/men-2.jpg';
+import men3 from './Collections/images/mens/men-3.jpg';
+import men4 from './Collections/images/mens/men-4.jpg';
+import men5 from './Collections/images/mens/men-5.jpg';
+import women1 from './Collections/images/womens/womens.jpg';
+import women2 from './Collections/images/womens/women-2.jpg';
+import women3 from './Collections/images/womens/women-3.jpeg';
+import women4 from './Collections/images/womens/women-4.jpg';
+import women5 from './Collections/images/womens/women-5.jpg';
+import kid1 from './Collections/images/kids/kids.jpg';
+import kid2 from './Collections/images/kids/kid-2.jpg';
+import kid3 from './Collections/images/kids/kid-3.jpg';
+import kid4 from './Collections/images/kids/kid-4.jpg';
+import kid5 from './Collections/images/kids/kid-5.jpg';
+
+import { Button } from 'react-mdl';
+import { addToCart } from '../Redux/Actions/action';
 class Details extends Component {
   constructor(props){
     super(props);
@@ -22,29 +41,35 @@ componentDidMount() {
   })  
   }  
 
-  // async fetchImage () {
-  //   try{
-  //     const res = await fetch(`http://localhost:8000/image/a7e63176b105a4699e2df04e94fd38bd.jpeg`)
-  //     console.log('2nd image****/', res)
-  //     this.setState({
-  //       pictures: res
-  //     })
-  //   } catch (e) {
-  //    console.log('Error', e)
-  //   } 
-  //     }
-
-
   render() {
     return (
-      <div className="container py-5">
+      <div className="container py-5" style={{backgroundColorL:'grey'}}>
       <div className="row">
         <div className="col-10 mx-auto text-center text-slanted text-blue my-5">
         </div>
       </div>
       <div className="row">
         <div className="col-10 mx-auto col-md-6 my-3">
-          <img src='dummy' className="img-fluid" alt='product' />
+          <img 
+          src = { 
+            this.state.products.title === 'mens' && this.state.products.price === 500 ? men1 :
+            this.state.products.title === 'mens' && this.state.products.price === 600 ? men2 :
+            this.state.products.title === 'mens' && this.state.products.price === 700 ? men3 :
+            this.state.products.title === 'mens' && this.state.products.price === 800 ? men4 :
+            this.state.products.title === 'mens' && this.state.products.price === 900 ? men5 :
+            this.state.products.title === 'womens' && this.state.products.price === 500 ? women1 :
+            this.state.products.title === 'womens' && this.state.products.price === 600 ? women2 :
+            this.state.products.title === 'womens' && this.state.products.price === 700 ? women3 :
+            this.state.products.title === 'womens' && this.state.products.price === 800 ? women4 :
+            this.state.products.title === 'womens' && this.state.products.price === 900 ? women5 :
+            this.state.products.title === 'kids' && this.state.products.price === 400 ? kid1 :
+            this.state.products.title === 'kids' && this.state.products.price === 500 ? kid2 :
+            this.state.products.title === 'kids' && this.state.products.price === 600 ? kid3 :
+            this.state.products.title === 'kids' && this.state.products.price === 700 ? kid4 :
+            this.state.products.title === 'kids' && this.state.products.price === 800 ? kid5
+            : '' 
+          } 
+          className="img-fluid" alt='product' />
         </div>
         <div className="col-10 mx-auto col-md-6 my-3 text-capitalize">
           <h1>Title : {this.state.products.title}</h1>
@@ -64,11 +89,17 @@ componentDidMount() {
           {/* buttons */}
           <div>
             <Link to="/">
-              <button>back to products</button>
+            <Button raised>Back to Products</Button>            
             </Link>
-            <button>
-             add to cart
-            </button>
+            <Button raised 
+            style={{marginLeft: 10}}
+            onClick={ () =>  {
+               this.props.dispatch( addToCart ( this.state.products ))
+               alert('Item Added successfully') 
+              }
+            }
+            >
+            Add to Cart</Button>
           </div>
         </div>
       </div>
@@ -77,4 +108,4 @@ componentDidMount() {
       )
   }
 }
-export default Details
+export default connect() (Details)

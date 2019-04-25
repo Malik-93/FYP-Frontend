@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import Layout from '../Layout';
 import { Container, Row, Col } from 'reactstrap';
 import { Nav, Navbar, Button } from 'react-bootstrap';
+import CartButton from './../cartButton';
 class FirstSlider extends Component {
   constructor(props, context) {
     super(props, context);
@@ -25,6 +26,7 @@ class FirstSlider extends Component {
     });
   }
   render() {
+    console.log('first slider')
     const { index, direction } = this.state;
     return (
       <div>
@@ -46,11 +48,9 @@ class FirstSlider extends Component {
                     <Link to='/collection/kids' ><Navbar.Brand className="category2">Kids</Navbar.Brand></Link>
                   </div>
                 </div>
-                <Link to='cart'>
-                <Button className='grad cart-btn'>
-                  <span className='mr-2'>
-                    <i className="fab fa-opencart"></i>
-                  </span>
+                <Link to='/cart'>
+                <Button className='grad'>
+                  <CartButton />
                   my cart
               </Button>
               </Link>

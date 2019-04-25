@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getKidsProduct } from '../../../src/Redux/Actions/action';
+import { getKidsProduct, addToCart } from '../../../src/Redux/Actions/action';
 import {Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import img from './images/kids.jpg';
+import img1 from './images/kids/kids.jpg';
+import img2 from './images/kids/kid-2.jpg';
+import img3 from './images/kids/kid-3.jpg';
+import img4 from './images/kids/kid-4.jpg';
+import img5 from './images/kids/kid-5.jpg';
+
+import { Button } from 'react-mdl';
 class KidsCollection extends Component {
   
   state = {
@@ -31,15 +37,22 @@ class KidsCollection extends Component {
     console.log('Kids Collection Render',this.props.products )
     return (
       <div>
-        <h1>Kids Collection</h1>
+        <h3>Kids Collection</h3>        
         <div className='my-container'>
         {
           this.state.products.map((product) => {
             return (
               <div key={Math.random()}>
                 {/* <span>ID: {product._id}</span> */}
-                  <Card style={{ width: '18rem' }} className="my-card">
-                  <Link to={'/details/'+product._id}><Card.Img className="card-img" variant="top" src={img} /></Link>                                       
+                  <Card style={{ width: '18rem' }}>
+                  <Link to={'/details/'+product._id}><Card.Img variant="top" 
+                  src={product.price === 400 ? img1 :
+                    product.price === 500 ? img2:
+                    product.price === 600 ? img3:
+                    product.price === 700 ? img4:
+                    product.price === 800 ? img5:
+                    ''} />
+                  </Link>                                       
                     <Card.Body>
                       <Card.Title><b>Title:</b> {product.title}</Card.Title>
                       <Card.Text>
@@ -50,9 +63,12 @@ class KidsCollection extends Component {
                       <ListGroupItem><b>Company:</b> {product.company}</ListGroupItem>
                       <ListGroupItem><span><b>Price:</b></span> $ {product.price}</ListGroupItem>
                     </ListGroup>
-                    <Card.Body>
-                  <Link to={'/details/'+ product._id }><button>Go to details</button> </Link>                
-                      <Link to="/cart"><button>Add to Cart</button> </Link> 
+                    <Card.Body>                
+                      <Button primary raised 
+                      onClick = { () =>  { 
+                        this.props.dispatch (addToCart ( product ))
+                        alert('Item Added to your cart') 
+                      } }  >Add to Cart</Button> 
                      </Card.Body>
                     <Card.Footer>
                      <p className="text-muted">Last Update: <span>{new Date().toLocaleTimeString()}</span></p>

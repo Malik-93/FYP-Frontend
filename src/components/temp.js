@@ -1,40 +1,34 @@
-import React, { Component } from 'react'
+import React from 'react';
+import { connect } from 'react-redux';
 
-export default class Temp extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            products: []
-        }
-    }
-  componentDidMount() {
-    fetch('http://localhost:3500/products/getItem')
-            .then(res => res.json() )
-            .then(items => {
-                console.log( items.data )
-                this.setState({ products: items.data }) 
-            })
-            .catch(err => console.log(err) )
-  }  
+export default function ( ComposedComponent ) {
+  class Temp extends React.Component {
+    componentDidMount ()  {
+     const token = localStorage.getItem('Token')
+     if( token === null ) {
+       this.props.history.push('/login')
+     }
+     this.props.history.push( '/cart' )
+     }
+    
+    
     render() {
-        console.log('State Products*/*/', this.state.products)
-    return (
-      <div>
-        <h1> Hello from temp component </h1>
-        <div>
-            {
-                this.state.products.map((p, index) => {
-                    return (
-                        <div key={index}>
-                           { p.title}
-                        <img src={ p.productImage } alt='Product' />
-                    </div>
-                    )
-
-                })
-            }
-        </div>
-      </div>
-    )
+      console.log( this.props.userAuth )
+      return (
+        <ComposedComponent { ...this.props } />    
+      )
+    }
+  
   }
+
+  const mapStateToProps = (state) => {
+    return {
+      userAuth: state.usersReducer.isAuth
+    }
+
+  }
+
+  return connect (mapStateToProps) ( Temp )
+
 }
+    
