@@ -5,8 +5,10 @@ import { connect } from 'react-redux';
 
 class LogIn extends React.Component {
   state = {
+    message: '',
+    divShow: false,
     token: undefined,
-    user: undefined
+    user: undefined,
   }
 
   signInFun = () => {
@@ -20,25 +22,35 @@ class LogIn extends React.Component {
        'Content-Type' : 'application/json'
      },
    }
-   fetch('http://localhost:8000/users/login', options )
+   fetch('/users/login', options )
    .then(res => res.json() )
-   .then( response => this.setState({
+   .then( response => { 
+    console.log( response.message ) 
+    this.setState({
+     divShow: true,
+     message: response.message,
      token: response.data,
-     user: response.user
-   }) 
+     user: response.user,
+   })
+  } 
 )
 .then(() => localStorage.setItem ('Token', this.state.token) )
-.then(() => localStorage.setItem ('User', this.state.user) )
+.then(() => localStorage.setItem ('User', JSON.stringify( this.state.user ) ) )
 .then(() => this.props.history.push('/cart'))
-   .catch(err => console.log( err ))
-  }
+.catch(err => console.log( err ))
+}
 
-  
   render() {
-    console.log( 'State token', this.state.toke)
-    console.log( 'State User', this.state.user)
     return (
       <div>
+      <div>
+       { 
+        this.state.divShow === true && this.state.message === 'invalid email or password' ?
+        <div className="alert alert-info">
+       <strong>{ this.state.message }</strong>
+       </div> : '' 
+       }
+       </div>
       <Form>
         <FormGroup>
           <Label for="exampleEmail">Email</Label>
@@ -50,7 +62,6 @@ class LogIn extends React.Component {
         </FormGroup>
         </Form>
         <Button onClick={this.signInFun}>Log In</Button>
-        {/* {this.state.isAuth ? this.props.history.push(`/cart/${this.state.user}`) : '' } */}
         </div>
         )
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getMensProduct, addToCart } from '../../../src/Redux/Actions/action';
+import { getMensProduct } from '../../Redux/Actions/product-actions';
+import { addToCart } from '../../Redux/Actions/cart-actions';
 import {Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import img from './images/mens/men.jpg';
@@ -22,18 +23,11 @@ class MensCollection extends Component {
   }
  
   componentDidMount = () => {
-    fetch('http://localhost:8000/getDbmens')
+    fetch('/getDbmens')
       .then((res) => res.json())
       .then((product) => {
-        console.log(product.data )
         this.props.getMens(product.data)
         localStorage.setItem('Mens-Collection', JSON.stringify(product.data) )
-      })
-      .then( item  => {
-        item =  localStorage.getItem('Mens-Collection' ) 
-      })
-      .then(() => {
-        localStorage.setItem('Cart', [] )
       }) 
       .catch((error) => console.log(error))
   }
@@ -47,16 +41,13 @@ else {
  this.setState({
    local: obj
  })
- console.log('By pressing Button',  obj )
 }
   }
 
   render() {
-    console.log('Check', this.state.cart.name)
     return (
     <div>
-   <h3>Mens Collection</h3>
-   <div className="my-container">
+   <div className="my-container 'header-bar'">
           {
             this.props.products.map((product) => {
               return (
@@ -83,7 +74,7 @@ else {
                     <Card.Body>              
                   <Button primary raised onClick = {() => {
                     this.props.addToCart( product )
-                    alert('Item Added to your cart')
+                    alert('Item Added to your cart!')
                   } } > Add To Cart</Button>                  
                         </Card.Body>
                     <Card.Footer>

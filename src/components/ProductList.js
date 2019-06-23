@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAllProduct } from '../Redux/Actions/action';
+import { getAllProduct } from '../Redux/Actions/product-actions';
 import { connect } from 'react-redux';
 import Product from './Product';
 import MensCollection from '../components/Collections/Mens-collection';
@@ -12,7 +12,7 @@ class ProductList extends Component {
   }
 
 componentDidMount() {
-  fetch("http://localhost:8000/allProducts")
+  fetch("/allProducts")
   .then(res => res.json() )
   .then(products => {
       this.props.dispatch( getAllProduct(products) )

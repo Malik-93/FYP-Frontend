@@ -17,19 +17,23 @@ import KidsCollection from './components/Collections/Kids-collection';
 import LogIn from '../src/components/Forms/Login';
 import SignUp from '../src/components/Forms/SignUp';
 import ProtectedRoute from './components/ProtectedRoute';
-// import Temp from './components/temp';
+import LoginNavigation from './components/loginNav';
+import SiteFooter from './components/Footer';
 
 class App extends Component {
   state = {
-    cartAuth: false
+    cartAuth: false,
   }
 
   render() {
     return (
       <Provider store = { store }>
-      <React.Fragment>
-        <Navigation />
-        {<br />}
+      <div >
+      <React.Fragment >
+        {localStorage.getItem('Token') ? <LoginNavigation /> : <Navigation /> }
+         {<br />}     
+         {<br />}     
+         {<br />}         
         <Switch>
           <Route exact path='/' component={FirstSlider}></Route>
           <Route path='/details/:id' component={Details}></Route>
@@ -41,10 +45,12 @@ class App extends Component {
           {/* <Route path='/admin' component={Admin} /> */}
           <Route path='/signup' component={SignUp} />
           <Route path='/login' component={LogIn} />
-          {/* <Route path='/temp' component={Temp} /> */}
           <Route component={Default}></Route>
         </Switch>
+        {<br />}
+        <SiteFooter />
       </React.Fragment>
+      </div>
       </Provider>
     );
   }

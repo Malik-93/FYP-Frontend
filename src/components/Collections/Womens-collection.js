@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getWomensProduct, addToCart } from '../../../src/Redux/Actions/action';
+import { getWomensProduct } from '../../Redux/Actions/product-actions';
+import { addToCart } from '../../Redux/Actions/cart-actions';
+
 import {Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import img1 from './images/womens/womens.jpg';
@@ -17,27 +19,23 @@ class WomensCollection extends Component {
   }
 
   componentDidMount = () => {
-  fetch('http://localhost:8000/womens')
+  fetch('/womens')
  .then((res) => res.json())
  .then((product) => {
- console.log(" DB Womens Product ", product)
   this.props.dispatch(getWomensProduct (product) )
 })
 .catch((error) => console.log(error))
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('nextProps', nextProps.products)
     this.setState({
       products: nextProps.products.data
     })
   }
 
   render() {
-    console.log('WomensMens Collection Render',this.state.products )
     return (
       <div>
-        <h3>Womens Collection</h3>
         <div className='my-container'>
         {
           this.state.products.map((product) => {

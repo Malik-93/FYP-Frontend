@@ -18,7 +18,7 @@ import kid4 from './Collections/images/kids/kid-4.jpg';
 import kid5 from './Collections/images/kids/kid-5.jpg';
 
 import { Button } from 'react-mdl';
-import { addToCart } from '../Redux/Actions/action';
+import { addToCart } from '../Redux/Actions/cart-actions';
 class Details extends Component {
   constructor(props){
     super(props);
@@ -29,7 +29,7 @@ class Details extends Component {
 
 
 componentDidMount() {
-  fetch('http://localhost:8000/details/' + this.props.match.params.id)
+  fetch('/details/' + this.props.match.params.id)
   .then(res =>  res.json() )
   .then(product => {
     this.setState({
